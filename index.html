@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+    <meta charset="UTF-g">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaktiver Lebenslauf | Sayipriyan Sandyakumar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Professional Blue & Gray -->
+    <!-- Application Structure Plan: Die Anwendung ist als eine moderne, einseitige Portfolio-Website strukturiert. Anstelle einer linearen Wiedergabe des Lebenslaufs beginnt sie mit einem prominenten Header, gefolgt von einem interaktiven "Kompetenz-Dashboard" für einen schnellen Überblick. Der Kern ist eine kombinierte, interaktive Zeitleiste für Ausbildung und Erfahrung, die den gesamten Werdegang logisch darstellt. Detaillierte Kompetenzen und Sprachen werden visuell aufbereitet. Diese Struktur wurde gewählt, um Personalverantwortlichen einen schnellen, aber tiefen Einblick zu ermöglichen und die wichtigsten Informationen hervorzuheben, anstatt sie zu zwingen, ein statisches Dokument zu lesen. Die Navigation erfolgt hauptsächlich durch Scrollen, unterstützt durch eine Navigationsleiste für direkten Zugriff auf die Sektionen. -->
+    <!-- Visualization & Content Choices: 
+        - Kopfzeile: Ziel: Informieren -> Methode: Grosser, klarer Text -> Interaktion: Klickbare Kontakt-Links -> Begründung: Schneller Zugriff auf wesentliche Informationen.
+        - Kompetenzen-Übersicht: Ziel: Organisieren/Vergleichen -> Methode: Radar-Diagramm (Chart.js) -> Interaktion: Hover-Effekte zeigen Details an -> Begründung: Bietet eine schnelle, visuelle Zusammenfassung der Kernkompetenzen in verschiedenen IT-Bereichen, was wirkungsvoller ist als eine Liste.
+        - Werdegang (Erfahrung & Ausbildung): Ziel: Wandel aufzeigen -> Methode: Vertikale, interaktive Zeitleiste (HTML/CSS) -> Interaktion: Klick zum Ein-/Ausklappen von Details -> Begründung: Erzählt die berufliche Geschichte chronologisch und intuitiv. Die Kombination von Ausbildung und Erfahrung in einer Ansicht vereinfacht das Verständnis des Werdegangs.
+        - Sprachen: Ziel: Vergleichen/Informieren -> Methode: Visuelle Balken (HTML/CSS) -> Interaktion: Keine, direkte Anzeige -> Begründung: Einfache und schnelle visuelle Erfassung der Sprachkenntnisse.
+        - Zertifikate & Referenzen: Ziel: Informieren -> Methode: Gestaltete Karten/Listen (HTML/CSS) -> Begründung: Klare und strukturierte Darstellung. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #60a5fa;
+            border: 4px solid #f8fafc;
+            z-index: 10;
+        }
+         .details-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .details-content.open {
+            max-height: 500px;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 450px;
+        }
+    </style>
+</head>
+<body class="text-slate-700">
+
+    <header id="home" class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-slate-800">
+                S. Sandyakumar
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#werdegang" class="text-slate-600 hover:text-blue-500 transition duration-300">Werdegang</a>
+                <a href="#kompetenzen" class="text-slate-600 hover:text-blue-500 transition duration-300">Kompetenzen</a>
+                <a href="#sprachen" class="text-slate-600 hover:text-blue-500 transition duration-300">Sprachen & Zertifikate</a>
+                <a href="#kontakt" class="text-slate-600 hover:text-blue-500 transition duration-300">Kontakt</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 md:py-20">
+
+        <section class="text-center mb-20">
+            <h1 class="text-4xl md:text-6xl font-bold text-slate-900 mb-4">Sayipriyan Sandyakumar</h1>
+            <p class="text-xl md:text-2xl text-blue-600 font-medium">Systeminformatiker & IT-Allrounder</p>
+        </section>
+
+        <section id="werdegang" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-12 text-slate-800">Mein Werdegang</h2>
+             <div class="text-center max-w-3xl mx-auto mb-12 text-slate-600">
+                <p>Diese interaktive Zeitleiste fasst meine Ausbildung und Berufserfahrung zusammen. Sie zeigt meinen Weg vom Kaufmann zum Systeminformatiker. Klicken Sie auf die einzelnen Stationen, um mehr über meine Aufgaben und Verantwortlichkeiten zu erfahren und ein detailliertes Bild meines beruflichen Werdegangs zu erhalten.</p>
+            </div>
+            <div class="relative max-w-3xl mx-auto border-l-2 border-slate-200 pl-8">
+
+                <div class="mb-8 relative timeline-item cursor-pointer" data-target="details-1">
+                    <h3 class="text-xl font-semibold text-slate-800">Plattforminformatiker EFZ</h3>
+                    <p class="text-md text-slate-500">BBZBL-IT, Pratteln | Rohrbogen AG</p>
+                    <time class="text-sm text-blue-500 font-medium">08/2021 - 08/2025</time>
+                    <div id="details-1" class="details-content">
+                        <p class="mt-4 text-slate-600">Aktuelle Ausbildung zum Plattformentwickler mit Fokus auf Systemadministration, Netzwerktechnik und IT-Infrastruktur-Management im Lehrbetrieb Rohrbogen AG.</p>
+                    </div>
+                </div>
+                
+                <div class="mb-8 relative timeline-item cursor-pointer" data-target="details-2">
+                    <h3 class="text-xl font-semibold text-slate-800">Systeminformatiker</h3>
+                    <p class="text-md text-slate-500">Rohrbogen AG, Pratteln</p>
+                    <time class="text-sm text-blue-500 font-medium">seit 08/2021</time>
+                     <div id="details-2" class="details-content">
+                        <p class="mt-4 text-slate-600">Aktuelle Anstellung parallel zur Ausbildung. Übernahme von Verantwortung im 1st & 2nd Level Support, Verwaltung der IT-Infrastruktur und Unterstützung bei diversen IT-Projekten.</p>
+                    </div>
+                </div>
+
+                <div class="mb-8 relative timeline-item cursor-pointer" data-target="details-3">
+                    <h3 class="text-xl font-semibold text-slate-800">Rekrutenschule</h3>
+                    <p class="text-md text-slate-500">Schweizer Armee</p>
+                    <time class="text-sm text-blue-500 font-medium">01/2021 - 05/2021</time>
+                </div>
+
+                <div class="mb-8 relative timeline-item cursor-pointer" data-target="details-4">
+                    <h3 class="text-xl font-semibold text-slate-800">IT- und kaufmännischer Allrounder</h3>
+                    <p class="text-md text-slate-500">Rohrbogen AG, Pratteln</p>
+                    <time class="text-sm text-blue-500 font-medium">09/2020 - 12/2020</time>
+                    <div id="details-4" class="details-content">
+                        <ul class="mt-4 text-slate-600 list-disc list-inside space-y-2">
+                            <li>Alleinige IT-Betreuung vor Ort</li>
+                            <li>Verwaltung der Unternehmenswebseite</li>
+                            <li>Betreuung von Citrix- und SIP (Isoware)-Systemen</li>
+                            <li>Unterstützung bei SAP-Prozessoptimierungen</li>
+                            <li>Umsetzung von Digitalisierungsprojekten</li>
+                            <li>Unterstützung beim Rebranding (Logos, Vorlagen)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mb-8 relative timeline-item cursor-pointer" data-target="details-5">
+                    <h3 class="text-xl font-semibold text-slate-800">Kaufmann EFZ</h3>
+                    <p class="text-md text-slate-500">KVBL, Liestal | Rohrbogen AG</p>
+                    <time class="text-sm text-blue-500 font-medium">08/2017 - 08/2020</time>
+                </div>
+                
+                <div class="mb-8 relative timeline-item cursor-pointer" data-target="details-6">
+                    <h3 class="text-xl font-semibold text-slate-800">Kaufmännische Vorbereitungsschule</h3>
+                    <p class="text-md text-slate-500">KVS, Reinach</p>
+                    <time class="text-sm text-blue-500 font-medium">08/2016 - 07/2017</time>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="kompetenzen" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-12 text-slate-800">Kernkompetenzen</h2>
+            <div class="text-center max-w-3xl mx-auto mb-12 text-slate-600">
+                <p>Dieses Diagramm visualisiert meine Hauptkompetenzen in der IT. Es zeigt meine Stärken in verschiedenen Bereichen von Support bis zur Systemadministration. Bewegen Sie die Maus über die Punkte, um die jeweilige Kompetenz anzuzeigen. Unten finden Sie eine detaillierte Liste der Technologien und Werkzeuge, mit denen ich vertraut bin.</p>
+            </div>
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <div class="w-full lg:w-1/2">
+                    <div class="chart-container">
+                        <canvas id="kompetenzenChart"></canvas>
+                    </div>
+                </div>
+                <div class="w-full lg:w-1/2 grid grid-cols-2 gap-x-8 gap-y-6">
+                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                        <h4 class="font-semibold text-slate-800">IT-Support</h4>
+                        <p class="text-sm text-slate-600">1st & 2nd Level</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                        <h4 class="font-semibold text-slate-800">Benutzerverwaltung</h4>
+                        <p class="text-sm text-slate-600">Active Directory, GPOs</p>
+                    </div>
+                     <div class="bg-white p-4 rounded-lg shadow-sm">
+                        <h4 class="font-semibold text-slate-800">Betriebssysteme</h4>
+                        <p class="text-sm text-slate-600">Windows-Client & Server</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                        <h4 class="font-semibold text-slate-800">M365 Administration</h4>
+                        <p class="text-sm text-slate-600">Teams, Outlook, Admin Center</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                        <h4 class="font-semibold text-slate-800">Virtualisierung</h4>
+                        <p class="text-sm text-slate-600">Citrix User-Umgebung</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                        <h4 class="font-semibold text-slate-800">ERP & SAP</h4>
+                        <p class="text-sm text-slate-600">SIP/Isoware, Prozessoptimierung</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                        <h4 class="font-semibold text-slate-800">Systemadministration</h4>
+                        <p class="text-sm text-slate-600">Netzwerk, Drucker, Monitoring</p>
+                    </div>
+                     <div class="bg-white p-4 rounded-lg shadow-sm">
+                        <h4 class="font-semibold text-slate-800">Scripting</h4>
+                        <p class="text-sm text-slate-600">PowerShell Grundlagen</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sprachen" class="bg-white rounded-xl shadow-md p-8 md:p-12">
+             <div class="text-center max-w-3xl mx-auto mb-12 text-slate-600">
+                <p>Dieser Bereich gibt einen Überblick über meine Sprachkenntnisse und offiziellen Zertifizierungen. Die visuellen Balken stellen mein jeweiliges Niveau gemäss dem Gemeinsamen Europäischen Referenzrahmen dar und verdeutlichen meine Fähigkeit, in verschiedenen Sprachen zu kommunizieren.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-2xl font-bold text-center mb-8 text-slate-800">Sprachen</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-base font-medium text-slate-700">Deutsch</span>
+                                <span class="text-sm font-medium text-blue-700">C2 - Muttersprachliches Niveau</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-2.5">
+                                <div class="bg-blue-600 h-2.5 rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-base font-medium text-slate-700">Tamilisch</span>
+                                <span class="text-sm font-medium text-blue-700">C2 - Muttersprachliches Niveau</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-2.5">
+                                <div class="bg-blue-600 h-2.5 rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-base font-medium text-slate-700">Englisch</span>
+                                <span class="text-sm font-medium text-blue-700">B1 - Fortgeschrittene Sprachverwendung</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-2.5">
+                                <div class="bg-blue-600 h-2.5 rounded-full" style="width: 65%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-base font-medium text-slate-700">Französisch</span>
+                                <span class="text-sm font-medium text-blue-700">A2 - Grundlegende Kenntnisse</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-2.5">
+                                <div class="bg-blue-600 h-2.5 rounded-full" style="width: 35%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <div>
+                    <h3 class="text-2xl font-bold text-center mb-8 text-slate-800">Zertifizierungen</h3>
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <p class="font-semibold text-slate-800">Cambridge Business English Certificate (BEC)</p>
+                            <p class="text-sm text-slate-500">Niveau: B1 | 2019</p>
+                        </div>
+                         <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <p class="font-semibold text-slate-800">DELF (Diplôme d'Études en Langue Française)</p>
+                            <p class="text-sm text-slate-500">Niveau: A2 | 2017</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="kontakt" class="bg-slate-800 text-slate-300 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold text-white mb-8">Kontakt & Referenzen</h2>
+            <div class="flex flex-col md:flex-row justify-center gap-8 md:gap-16 mb-8">
+                 <div>
+                    <h4 class="font-semibold text-lg text-white">Kontaktinformationen</h4>
+                    <p>Sayipriyan Sandyakumar</p>
+                    <p>Frühbrunnen 10, 4225 Brislach</p>
+                    <a href="mailto:sayipriyan2000@gmail.com" class="text-blue-400 hover:text-blue-300">sayipriyan2000@gmail.com</a>
+                    <br>
+                    <a href="tel:+41787993848" class="text-blue-400 hover:text-blue-300">+41 78 799 38 48</a>
+                </div>
+                 <div>
+                    <h4 class="font-semibold text-lg text-white">Referenzen</h4>
+                    <p>Pascal Probst, Leiter Informatik, Rohrbogen AG</p>
+                    <p>Moritz Jenni, Leiter Verkauf, Rohrbogen AG</p>
+                    <p class="text-sm mt-2">(Kontaktdaten auf Anfrage)</p>
+                </div>
+            </div>
+            <p class="text-sm text-slate-400 mt-8">&copy; 2025 Sayipriyan Sandyakumar</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            timelineItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const targetId = item.getAttribute('data-target');
+                    const detailsContent = document.getElementById(targetId);
+                    if (detailsContent) {
+                        detailsContent.classList.toggle('open');
+                    }
+                });
+            });
+
+            const ctx = document.getElementById('kompetenzenChart').getContext('2d');
+            const kompetenzenChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'IT-Support', 
+                        'Systemadministration', 
+                        'Benutzerverwaltung', 
+                        'M365', 
+                        'Virtualisierung', 
+                        'ERP/SAP'
+                    ],
+                    datasets: [{
+                        label: 'Kompetenzniveau',
+                        data: [90, 85, 95, 80, 75, 70],
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(59, 130, 246, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 14,
+                                    family: 'Inter, sans-serif'
+                                },
+                                color: '#334155'
+                            },
+                            ticks: {
+                                backdropColor: 'rgba(248, 250, 252, 0.75)',
+                                color: '#64748b',
+                                stepSize: 25,
+                                display: false
+                            },
+                             min: 0,
+                             max: 100
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.r !== null) {
+                                        label += context.parsed.r + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
