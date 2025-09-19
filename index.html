@@ -10,18 +10,19 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  body.locked { overflow: hidden; height: 100vh; }
-  #protectedContent { display: none; }
-  body { font-family: 'Inter', sans-serif; background-color: #f8fafc; scroll-behavior: smooth; }
-  .timeline-item:before { content: ''; position: absolute; left: -33px; top: 5px; width: 24px; height: 24px; border-radius: 50%; background-color: #60a5fa; border: 4px solid #f8fafc; z-index: 10; }
-  .details-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; }
-  .details-content.open { max-height: 500px; }
-  .chart-container { position: relative; width: 100%; max-width: 500px; margin-left: auto; margin-right: auto; height: 400px; max-height: 450px; }
-  .animated-section { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
-  .animated-section.is-visible { opacity: 1; transform: translateY(0); }
-  .language-bar-inner { transform: scaleX(0); transform-origin: left; transition: transform 1s ease-out; }
-  .is-visible .language-bar-inner { transform: scaleX(1); }
-  .timeline-icon { width: 24px; height: 24px; display:inline-block; background-color:#60a5fa; border-radius:50%; margin-right:8px; vertical-align:middle; }
+body.locked { overflow: hidden; height: 100vh; }
+#protectedContent { display: none; }
+body { font-family: 'Inter', sans-serif; background-color: #f8fafc; scroll-behavior: smooth; }
+.timeline-item:before { content: ''; position: absolute; left: -33px; top: 5px; width: 24px; height: 24px; border-radius: 50%; background-color: #60a5fa; border: 4px solid #f8fafc; z-index: 10; }
+.details-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; }
+.details-content.open { max-height: 500px; }
+.chart-container { position: relative; width: 100%; max-width: 500px; margin-left: auto; margin-right: auto; height: 400px; max-height: 450px; }
+.animated-section { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+.animated-section.is-visible { opacity: 1; transform: translateY(0); }
+.language-bar-inner { transform: scaleX(0); transform-origin: left; transition: transform 1s ease-out; }
+.is-visible .language-bar-inner { transform: scaleX(1); }
+.timeline-icon { width: 24px; height: 24px; display:inline-block; background-color:#60a5fa; border-radius:50%; margin-right:8px; vertical-align:middle; }
+.timeline-item:hover .timeline-icon { transform: scale(1.2); transition: transform 0.3s ease; }
 </style>
 </head>
 <body class="locked text-slate-700">
@@ -72,29 +73,19 @@
     <section id="werdegang" class="mb-20 animated-section">
       <h2 class="text-3xl font-bold text-center mb-12 text-slate-800">Mein Werdegang</h2>
       <div class="text-center max-w-3xl mx-auto mb-12 text-slate-600">
-        <p>Diese interaktive Zeitleiste zeigt meine Ausbildung und Berufserfahrung. Klicken Sie auf die einzelnen Stationen, um Details zu sehen.</p>
+        <p>Chronologischer Überblick über meine Ausbildung und Berufserfahrung.</p>
       </div>
       <div class="relative max-w-3xl mx-auto border-l-2 border-slate-200 pl-8">
 
-        <!-- Timeline Items -->
+        <!-- Chronologisch korrekt -->
         <div class="mb-8 relative timeline-item cursor-pointer animated-section" data-target="details-1">
-          <div class="flex items-center"><span class="timeline-icon"></span><h3 class="text-xl font-semibold text-slate-800">Plattforminformatiker EFZ</h3></div>
-          <p class="text-md text-slate-500">BBZBL-IT, Pratteln | 08/2021 - 08/2025</p>
-          <div id="details-1" class="details-content">
-            <p class="mt-4 text-slate-600">Aktuelle Ausbildung zum Plattformentwickler mit Fokus auf Systemadministration, Netzwerktechnik und IT-Infrastruktur-Management.</p>
-          </div>
+          <div class="flex items-center"><span class="timeline-icon"></span><h3 class="text-xl font-semibold text-slate-800">Kaufmännische Vorbereitungsschule</h3></div>
+          <p class="text-md text-slate-500">KVS, Reinach | 08/2016 - 07/2017</p>
         </div>
 
         <div class="mb-8 relative timeline-item cursor-pointer animated-section" data-target="details-2">
-          <div class="flex items-center"><span class="timeline-icon"></span><h3 class="text-xl font-semibold text-slate-800">Systemengineer</h3></div>
-          <p class="text-md text-slate-500">Rohrbogen AG, Pratteln | seit 08/2025</p>
-          <div id="details-2" class="details-content">
-            <ul class="mt-4 text-slate-600 list-disc list-inside space-y-2">
-              <li>1st & 2nd Level Support</li>
-              <li>Verwaltung der IT-Infrastruktur</li>
-              <li>Unterstützung bei SAP- und Digitalisierungsprojekten</li>
-            </ul>
-          </div>
+          <div class="flex items-center"><span class="timeline-icon"></span><h3 class="text-xl font-semibold text-slate-800">Kaufmann EFZ</h3></div>
+          <p class="text-md text-slate-500">KvBL, Liestal | 08/2017 - 08/2020</p>
         </div>
 
         <div class="mb-8 relative timeline-item cursor-pointer animated-section" data-target="details-3">
@@ -104,9 +95,9 @@
             <ul class="mt-4 text-slate-600 list-disc list-inside space-y-2">
               <li>Alleinige IT-Betreuung vor Ort</li>
               <li>Verwaltung der Unternehmenswebseite</li>
-              <li>Citrix & SIP (Isoware) Systeme</li>
-              <li>SAP-Prozessoptimierungen & Digitalisierungsprojekte</li>
-              <li>Rebranding-Unterstützung (Logos & Vorlagen)</li>
+              <li>Betreuung von Citrix- und SIP-Systemen</li>
+              <li>Unterstützung bei SAP-Prozessoptimierungen</li>
+              <li>Digitalisierungsprojekte umgesetzt</li>
             </ul>
           </div>
         </div>
@@ -117,13 +108,16 @@
         </div>
 
         <div class="mb-8 relative timeline-item cursor-pointer animated-section" data-target="details-5">
-          <div class="flex items-center"><span class="timeline-icon"></span><h3 class="text-xl font-semibold text-slate-800">Kaufmann EFZ</h3></div>
-          <p class="text-md text-slate-500">KvBL, Liestal | 08/2017 - 08/2020</p>
+          <div class="flex items-center"><span class="timeline-icon"></span><h3 class="text-xl font-semibold text-slate-800">Plattforminformatiker EFZ</h3></div>
+          <p class="text-md text-slate-500">BBZBL-IT, Pratteln | 08/2021 - 08/2025</p>
+          <div id="details-5" class="details-content">
+            <p class="mt-4 text-slate-600">Ausbildung mit Fokus auf Systemadministration, Netzwerktechnik und IT-Infrastruktur-Management.</p>
+          </div>
         </div>
 
         <div class="mb-8 relative timeline-item cursor-pointer animated-section" data-target="details-6">
-          <div class="flex items-center"><span class="timeline-icon"></span><h3 class="text-xl font-semibold text-slate-800">Kaufmännische Vorbereitungsschule</h3></div>
-          <p class="text-md text-slate-500">KVS, Reinach | 08/2016 - 07/2017</p>
+          <div class="flex items-center"><span class="timeline-icon"></span><h3 class="text-xl font-semibold text-slate-800">Systemengineer</h3></div>
+          <p class="text-md text-slate-500">Rohrbogen AG, Pratteln | seit 08/2025</p>
         </div>
 
       </div>
@@ -133,7 +127,7 @@
     <section id="kompetenzen" class="mb-20 animated-section">
       <h2 class="text-3xl font-bold text-center mb-12 text-slate-800">Kernkompetenzen</h2>
       <div class="text-center max-w-3xl mx-auto mb-12 text-slate-600">
-        <p>Meine Hauptkompetenzen in IT, Support, Administration und Digitalisierung.</p>
+        <p>Meine Hauptkompetenzen in IT, Support und Systemadministration.</p>
       </div>
       <div class="flex flex-col lg:flex-row items-center gap-12">
 
@@ -150,31 +144,18 @@
           </div>
           <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
             <h4 class="font-semibold text-slate-800">Benutzerverwaltung</h4>
-            <p class="text-sm text-slate-600">Active Directory, GPOs</p>
           </div>
           <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
             <h4 class="font-semibold text-slate-800">Windows OS</h4>
-            <p class="text-sm text-slate-600">Client & Server</p>
           </div>
           <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
-            <h4 class="font-semibold text-slate-800">M365 Administration</h4>
-            <p class="text-sm text-slate-600">Teams, Outlook, Admin Center</p>
+            <h4 class="font-semibold text-slate-800">M365</h4>
           </div>
           <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
             <h4 class="font-semibold text-slate-800">Virtualisierung</h4>
-            <p class="text-sm text-slate-600">Citrix User-Umgebung</p>
           </div>
           <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
-            <h4 class="font-semibold text-slate-800">ERP & SAP</h4>
-            <p class="text-sm text-slate-600">SIP/Isoware & Prozessoptimierung</p>
-          </div>
-          <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
-            <h4 class="font-semibold text-slate-800">Webseitenpflege</h4>
-            <p class="text-sm text-slate-600">Inhalte & Layouts</p>
-          </div>
-          <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
-            <h4 class="font-semibold text-slate-800">PowerShell</h4>
-            <p class="text-sm text-slate-600">Automatisierung & Grundlagen</p>
+            <h4 class="font-semibold text-slate-800">ERP / SAP</h4>
           </div>
         </div>
 
@@ -184,7 +165,7 @@
     <!-- Sprachen & Zertifikate -->
     <section id="sprachen" class="bg-white rounded-xl shadow-md p-8 md:p-12 animated-section">
       <div class="text-center max-w-3xl mx-auto mb-12 text-slate-600">
-        <p>Meine Sprachkenntnisse und offiziellen Zertifikate.</p>
+        <p>Meine Sprachkenntnisse und Zertifikate.</p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
 
@@ -214,8 +195,12 @@
           <h3 class="text-2xl font-bold text-center mb-8 text-slate-800">Zertifikate</h3>
           <div class="space-y-4">
             <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 hover:border-blue-300 transition-colors duration-300">
-              <p class="font-semibold text-slate-800">Cambridge Business English Certificate (BEC)</p>
-              <p class="text-sm text-slate-500">2019 | Niveau: Preliminary</p>
+              <p class="font-semibold text-slate-800">Cambridge Business English Certificate (BEC Preliminary)</p>
+              <p class="text-sm text-slate-500">2019</p>
+            </div>
+            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 hover:border-blue-300 transition-colors duration-300">
+              <p class="font-semibold text-slate-800">Französisch A2</p>
+              <p class="text-sm text-slate-500">Grundlegende Kenntnisse</p>
             </div>
           </div>
         </div>
@@ -250,60 +235,33 @@
 
 <script>
 function checkPassword() {
-  const input = document.getElementById("passwordInput").value;
-  const errorMessage = document.getElementById("errorMessage");
-  if(input==="kuttyma"){
-    document.getElementById("passwordOverlay").style.display="none";
-    document.getElementById("protectedContent").style.display="block";
-    document.body.classList.remove("locked");
-  } else { errorMessage.classList.remove("hidden"); }
+  const input=document.getElementById("passwordInput").value;
+  const errorMessage=document.getElementById("errorMessage");
+  if(input==="kuttyma"){document.getElementById("passwordOverlay").style.display="none";document.getElementById("protectedContent").style.display="block";document.body.classList.remove("locked");} 
+  else { errorMessage.classList.remove("hidden"); }
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
-  const timelineItems=document.querySelectorAll('.timeline-item');
-  timelineItems.forEach(item=>{item.addEventListener('click',()=>{
+  document.querySelectorAll('.timeline-item').forEach(item=>{item.addEventListener('click',()=>{
     const targetId=item.getAttribute('data-target');
-    const detailsContent=document.getElementById(targetId);
-    if(detailsContent){detailsContent.classList.toggle('open');}
+    const details=document.getElementById(targetId);
+    if(details){details.classList.toggle('open');}
   })});
 
-  const animatedElements=document.querySelectorAll('.animated-section, .language-bar, .timeline-item');
-  const observer=new IntersectionObserver(entries=>{
-    entries.forEach((entry,index)=>{
-      if(entry.isIntersecting){setTimeout(()=>{entry.target.classList.add('is-visible');},index*100);}
-    });
-  },{threshold:0.1});
-  animatedElements.forEach(el=>observer.observe(el));
+  const animated=document.querySelectorAll('.animated-section, .language-bar, .timeline-item');
+  const observer=new IntersectionObserver(entries=>{entries.forEach((entry,index)=>{if(entry.isIntersecting){setTimeout(()=>{entry.target.classList.add('is-visible');},index*100);}})},{threshold:0.1});
+  animated.forEach(el=>observer.observe(el));
 
-  const chartObserver=new IntersectionObserver(entries=>{
-    if(entries[0].isIntersecting){createChart();chartObserver.unobserve(entries[0].target);}
-  },{threshold:0.5});
+  const chartObserver=new IntersectionObserver(entries=>{if(entries[0].isIntersecting){createChart();chartObserver.unobserve(entries[0].target);}}, {threshold:0.5});
   chartObserver.observe(document.getElementById('kompetenzenChart'));
 
   function createChart(){
     const ctx=document.getElementById('kompetenzenChart').getContext('2d');
     new Chart(ctx,{
       type:'radar',
-      data:{
-        labels:['IT-Support','Benutzerverwaltung','Windows OS','M365','Virtualisierung','ERP/SAP','Webseitenpflege','PowerShell','Systemadministration','Rebranding'],
-        datasets:[{
-          label:'Kompetenzniveau',
-          data:[90,85,90,80,75,70,65,60,85,50],
-          backgroundColor:'rgba(59,130,246,0.2)',
-          borderColor:'rgba(59,130,246,1)',
-          borderWidth:2,
-          pointBackgroundColor:'rgba(59,130,246,1)',
-          pointBorderColor:'#fff',
-          pointHoverBackgroundColor:'#fff',
-          pointHoverBorderColor:'rgba(59,130,246,1)'
-        }]
-      },
-      options:{
-        responsive:true,
-        maintainAspectRatio:false,
-        scales:{r:{angleLines:{color:'rgba(0,0,0,0.1)'},grid:{color:'rgba(0,0,0,0.1)'}}},
-        plugins:{legend:{display:false}}
-      }
+      data:{labels:['IT-Support','Benutzerverwaltung','Windows OS','M365','Virtualisierung','ERP / SAP'],
+      datasets:[{label:'Kompetenzniveau',data:[90,85,90,80,75,70],backgroundColor:'rgba(59,130,246,0.2)',borderColor:'rgba(59,130,246,1)',borderWidth:2,pointBackgroundColor:'rgba(59,130,246,1)',pointBorderColor:'#fff',pointHoverBackgroundColor:'#fff',pointHoverBorderColor:'rgba(59,130,246,1)'}]},
+      options:{responsive:true,maintainAspectRatio:false,scales:{r:{angleLines:{color:'rgba(0,0,0,0.1)'},grid:{color:'rgba(0,0,0,0.1)'}}},plugins:{legend:{display:false}}}
     });
   }
 });
@@ -311,3 +269,4 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 </body>
 </html>
+
