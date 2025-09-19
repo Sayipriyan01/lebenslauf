@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interaktiver Lebenslauf | Sayipriyan Sandyakumar</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  body.locked { overflow: hidden; height: 100vh; }
+  #protectedContent { display: none; }
+  body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; }
+
+  /* Timeline */
+  .timeline-item:before {
+    content: '';
+    position: absolute;
+    left: -33px;
+    top: 5px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #3b82f6;
+    border: 4px solid #f8fafc;
+    z-index: 10;
+    transition: transform 0.3s;
+  }
+  .timeline-item:hover:before { transform: scale(1.2); }
+  .details-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; }
+  .details-content.open { max-height: 600px; }
+  .chart-container { position: relative; width: 100%; max-width: 500px; margin: 0 auto; height: 400px; }
+  .animated-section { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+  .animated-section.is-visible { opacity: 1; transform: translateY(0); }
+  .language-bar-inner { transform: scaleX(0); transform-origin: left; transition: transform 1s ease-out; }
+  .is-visible .language-bar-inner { transform: scaleX(1); }
+
+  /* News Banner */
+  .news-banner { background: linear-gradient(90deg,#3b82f6,#2563eb); color:white; padding:0.75rem; text-align:center; font-weight:600; border-radius:0.5rem; margin-bottom:1rem; animation: bounce 1s infinite alternate; }
+  @keyframes bounce { 0%{transform:translateY(0);}100%{transform:translateY(-5px);} }
+
+  /* Buttons */
+  .download-btn { background-color: #3b82f6; color: white; font-weight: 600; padding:0.5rem 1rem; border-radius:0.5rem; transition: all 0.3s; }
+  .download-btn:hover { background-color: #2563eb; transform: scale(1.05); }
+
+  @media (max-width:768px) {
+    .timeline-item:before { left: -20px; top: 0; }
+    .timeline-item { padding-left: 2rem; }
+  }
+</style>
+</head>
+<body class="locked">
+
+<!-- Passwort Overlay -->
+<div id="passwordOverlay" class="fixed inset-0 bg-slate-900 flex items-center justify-center z-50">
+  <div class="bg-white p-8 rounded-xl shadow-lg w-96 text-center">
+    <h1 class="text-2xl font-bold mb-4 text-slate-800">🔒 Geschützter Bereich</h1>
+    <p class="text-slate-600 mb-6">Bitte Passwort eingeben, um die Seite zu sehen.</p>
+    <input id="passwordInput" type="password" placeholder="Passwort" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4">
+    <button onclick="checkPassword()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">Entsperren</button>
+    <p id="errorMessage" class="text-red-500 text-sm mt-3 hidden">❌ Falsches Passwort</p>
+  </div>
+</div>
+
+<!-- Geschützter Inhalt -->
+<div id="protectedContent">
+
+  <!-- News -->
+  <div class="news-banner">🎉 Lehrabschluss Plattforminformatiker EFZ abgeschlossen mit Note 5.5!</div>
+
+  <!-- Header -->
+  <header id="home" class="bg-blue-800 shadow-sm sticky top-0 z-50 transition-all duration-300">
+    <nav class="container mx-auto px-6 py-3 flex justify-between items-center text-white">
+      <div class="text-2xl font-bold">S. Sandyakumar</div>
+      <div class="hidden md:flex space-x-8">
+        <a href="#werdegang" class="hover:text-blue-300 transition duration-300">Werdegang</a>
+        <a href="#kompetenzen" class="hover:text-blue-300 transition duration-300">Kompetenzen</a>
+        <a href="#sprachen" class="hover:text-blue-300 transition duration-300">Sprachen & Zertifikate</a>
+        <a href="#downloads" class="hover:text-blue-300 transition duration-300">Downloads</a>
+        <a href="#kontakt" class="hover:text-blue-300 transition duration-300">Kontakt</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main -->
+  <main class="container mx-auto px-6 py-12 md:py-20">
+
+    <!-- Profil -->
+    <section class="flex flex-col md:flex-row items-center justify-center text-center md:text-left gap-6 mb-12 animated-section">
+      <img src="bild1.png" alt="Profilbild" class="w-48 h-48 rounded-full shadow-2xl border-4 border-white object-cover animate-bounce">
+      <div>
+        <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-2">Sayipriyan Sandyakumar</h1>
+        <p class="text-xl md:text-2xl text-blue-600 font-medium">Kaufmann EFZ & Plattforminformatiker EFZ</p>
+      </div>
+    </section>
+
+    <!-- Werdegang -->
+    <section id="werdegang" class="mb-20 animated-section">
+      <h2 class="text-3xl font-bold text-center mb-12 text-slate-800">Mein Werdegang</h2>
+      <div class="relative max-w-3xl mx-auto border-l-2 border-slate-200 pl-8">
+        <!-- Aktuell -->
+        <div class="mb-8 relative timeline-item cursor-pointer animated-section" data-target="details-6">
+          <h3 class="text-xl font-semibold text-slate-800">Systemengineer</h3>
+          <p class="text-md text-slate-500">Rohrbogen AG</p>
+          <time class="text-sm text-blue-500 font-medium">seit 08/2025</time>
+        </div>
+        <!-- Plattforminformatiker EFZ -->
+        <div class="mb-8 relative timeline-item cursor-pointer animated-section" data-target="details-5">
+          <h3 class="text-xl font-semibold text-slate-800">Plattforminformatiker EFZ (Rohrbogen AG)</h3>
+          <p class="text-md text-slate-500">BBZBL-IT, Pratteln</p>
+          <time class="text-sm text-blue-500 font-medium">08/2021 - 08/2025</time>
+          <div id="details-5" class="details-content">
+            <p class="mt-4 text-slate-600">Ausbildung mit Fokus auf Systemadministration, Netzwerke und IT-Infrastruktur.</p>
+          </div>
+        </div>
+        <!-- Rekrutenschule -->
+        <div class="mb-8 relative timeline-item cursor-pointer animated-section" data-target="details-4">
+          <h3 class="text-xl font-semibold text-slate-800">Rekrutenschule</h3>
+          <p class="text-md text-slate-500">Schweizer Armee</p>
+          <time class="text-sm text-blue-500 font-medium">01/2021 - 05/2021</time>
+        </div>
+        <!-- IT & kaufmännischer Allrounder -->
+        <div class="mb-8 relative timeline-item cursor-pointer animated-section" data-target="details-3">
+          <h3 class="text-xl font-semibold text-slate-800">IT- & kaufmännischer Allrounder</h3>
+          <p class="text-md text-slate-500">Rohrbogen AG</p>
+          <time class="text-sm text-blue-500 font-medium">09/2020 - 12/2020</time>
+          <div id="details-3" class="details-content">
+            <ul class="mt-4 text-slate-600 list-disc list-inside">
+              <li>Alleinige IT-Betreuung vor Ort</li>
+              <li>Verwaltung der Unternehmenswebseite</li>
+              <li>Betreuung von Citrix- und SIP/Isoware-Systemen</li>
+              <li>Unterstützung bei SAP-Prozessoptimierungen</li>
+              <li>Umsetzung von Digitalisierungsprojekten</li>
+            </ul>
+          </div>
+        </div>
+        <!-- Kaufmann EFZ -->
+        <div class="mb-8 relative timeline-item cursor-pointer animated-section" data-target="details-2">
+          <h3 class="text-xl font-semibold text-slate-800">Kaufmann EFZ (Rohrbogen AG)</h3>
+          <p class="text-md text-slate-500">KVBL, Liestal</p>
+          <time class="text-sm text-blue-500 font-medium">08/2017 - 08/2020</time>
+        </div>
+        <!-- Kaufmännische Vorbereitungsschule -->
+        <div class="mb-8 relative timeline-item cursor-pointer animated-section" data-target="details-1">
+          <h3 class="text-xl font-semibold text-slate-800">Kaufmännische Vorbereitungsschule</h3>
+          <p class="text-md text-slate-500">KVS, Reinach</p>
+          <time class="text-sm text-blue-500 font-medium">08/2016 - 07/2017</time>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kernkompetenzen -->
+    <section id="kompetenzen" class="mb-20 animated-section">
+      <h2 class="text-3xl font-bold text-center mb-12 text-slate-800">Kernkompetenzen</h2>
+      <div class="flex flex-col lg:flex-row items-center gap-12">
+        <div class="w-full lg:w-1/2 chart-container">
+          <canvas id="kompetenzenChart"></canvas>
+        </div>
+        <div class="w-full lg:w-1/2 grid grid-cols-2 gap-6">
+          <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300"><h4 class="font-semibold">IT-Support</h4><p>1st & 2nd Level</p></div>
+          <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300"><h4 class="font-semibold">Benutzerverwaltung</h4><p>Active Directory, GPOs</p></div>
+          <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300"><h4 class="font-semibold">Windows</h4><p>Client & Server</p></div>
+          <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300"><h4 class="font-semibold">Microsoft 365</h4><p>Teams, Outlook, Admin</p></div>
+          <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300"><h4 class="font-semibold">Virtualisierung</h4><p>Citrix User-Umgebung</p></div>
+          <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300"><h4 class="font-semibold">ERP & SAP</h4><p>SIP/Isoware, Prozessoptimierung</p></div>
+          <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300"><h4 class="font-semibold">Systemadministration</h4><p>Drucker, Netzwerk, Clients</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sprachen & Zertifikate -->
+    <section id="sprachen" class="bg-white rounded-xl shadow-md p-8 md:p-12 animated-section">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div>
+          <h3 class="text-2xl font-bold text-center mb-8">Sprachen</h3>
+          <div class="space-y-6">
+            <div class="language-bar"><div class="flex justify-between mb-1"><span>Tamilisch</span><span>C2</span></div><div class="w-full bg-slate-200 rounded-full h-2.5"><div class="bg-blue-600 h-2.5 rounded-full language-bar-inner" style="width:100%"></div></div></div>
+            <div class="language-bar"><div class="flex justify-between mb-1"><span>Deutsch</span><span>C2</span></div><div class="w-full bg-slate-200 rounded-full h-2.5"><div class="bg-blue-600 h-2.5 rounded-full language-bar-inner" style="width:100%"></div></div></div>
+            <div class="language-bar"><div class="flex justify-between mb-1"><span>Englisch</span><span>B2</span></div><div class="w-full bg-slate-200 rounded-full h-2.5"><div class="bg-blue-600 h-2.5 rounded-full language-bar-inner" style="width:65%"></div></div></div>
+            <div class="language-bar"><div class="flex justify-between mb-1"><span>Französisch</span><span>A2</span></div><div class="w-full bg-slate-200 rounded-full h-2.5"><div class="bg-blue-600 h-2.5 rounded-full language-bar-inner" style="width:35%"></div></div></div>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-2xl font-bold text-center mb-8">Zertifikate</h3>
+          <ul class="space-y-4">
+            <li class="p-4 bg-slate-50 rounded-lg border border-slate-200 hover:border-blue-400 transition"><strong>Cambridge Business English Certificate (BEC Preliminary)</strong> | 2019</li>
+            <li class="p-4 bg-slate-50 rounded-lg border border-slate-200 hover:border-blue-400 transition"><strong>DELF (Diplôme d'Études en Langue Française)</strong> | 2017</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Downloads -->
+    <section id="downloads" class="mb-20 text-center animated-section">
+      <h2 class="text-3xl font-bold mb-8">Meine Dokumente</h2>
+      <div class="flex flex-col md:flex-row justify-center gap-6">
+        <a href="https://github.com/deinusername/deinrepo/raw/main/Zeugnisse.pdf" target="_blank" class="download-btn">Zeugnisse & Zertifikate</a>
+        <a href="https://github.com/deinusername/deinrepo/raw/main/Lebenslauf.pdf" target="_blank" class="download-btn">Lebenslauf</a>
+        <a href="https://github.com/deinusername/deinrepo/raw/main/Arbeitszeugnisse.pdf" target="_blank" class="download-btn">Arbeitszeugnisse</a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="kontakt" class="bg-slate-800 text-slate-300 py-12">
+      <div class="container mx-auto text-center">
+        <h2 class="text-3xl font-bold text-white mb-8">Kontakt & Referenzen</h2>
+        <p>Sayipriyan Sandyakumar | Frühbrunnen 10, 4225 Brislach</p>
+        <p>Email: <a href="mailto:sayipriyan2000@gmail.com" class="text-blue-400">sayipriyan2000@gmail.com</a> | Tel.: <a href="tel:+41787993848" class="text-blue-400">+41 78 799 38 48</a></p>
+        <p class="mt-4">Referenzen auf Anfrage: Pascal Probst, Moritz Jenni</p>
+        <p class="text-sm mt-6">&copy; 2025 Sayipriyan Sandyakumar</p>
+      </div>
+    </footer>
+
+  </div>
+
+<script>
+function checkPassword() {
+  const input = document.getElementById("passwordInput").value;
+  const errorMessage = document.getElementById("errorMessage");
+  if(input==="kuttyma"){ 
+    document.getElementById("passwordOverlay").style.display="none";
+    document.getElementById("protectedContent").style.display="block";
+    document.body.classList.remove("locked");
+  } else { errorMessage.classList.remove("hidden"); }
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  const timelineItems=document.querySelectorAll('.timeline-item');
+  timelineItems.forEach(item=>item.addEventListener('click', ()=>{
+    const target=document.getElementById(item.dataset.target);
+    if(target) target.classList.toggle('open');
+  }));
+
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach((entry,index)=>{
+      if(entry.isIntersecting) setTimeout(()=>{entry.target.classList.add('is-visible');},index*100);
+    });
+  },{threshold:0.1});
+  document.querySelectorAll('.animated-section,.language-bar,.timeline-item').forEach(el=>observer.observe(el));
+
+  const chartObserver=new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting){
+      const ctx=document.getElementById('kompetenzenChart').getContext('2d');
+      new Chart(ctx,{
+        type:'radar',
+        data:{
+          labels:['IT-Support','Benutzerverwaltung','Windows','Microsoft 365','Virtualisierung','SAP','Systemadministration'],
+          datasets:[{
+            label:'Kompetenzniveau',
+            data:[90,88,85,84,82,80,80],
+            backgroundColor:'rgba(59,130,246,0.2)',
+            borderColor:'rgba(59,130,246,1)',
+            borderWidth:2,
+            pointBackgroundColor:'rgba(59,130,246,1)',
+            pointBorderColor:'#fff',
+            pointHoverBackgroundColor:'#fff',
+            pointHoverBorderColor:'rgba(59,130,246,1)'
+          }]
+        },
+        options:{responsive:true,maintainAspectRatio:false,scales:{r:{angleLines:{color:'rgba(0,0,0,0.1)'},grid:{color:'rgba(0,0,0,0.1)'}}},plugins:{legend:{display:false}}}
+      });
+      chartObserver.unobserve(entries[0].target);
+    }
+  },{threshold:0.5});
+  chartObserver.observe(document.getElementById('kompetenzenChart'));
+});
+</script>
+
+</body>
+</html>
+
