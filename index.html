@@ -1,176 +1,229 @@
 <!DOCTYPE html>
 <html lang="de" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interaktiver Lebenslauf | Sayipriyan Sandyakumar</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-  <style>
-    body.locked { overflow: hidden; height: 100vh; }
-    #protectedContent { display: none; }
-
-    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-    .timeline-item:before {
-      content: '';
-      position: absolute;
-      left: -33px;
-      top: 5px;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background-color: #60a5fa;
-      border: 4px solid #f8fafc;
-      z-index: 10;
-    }
-    .details-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.5s ease-in-out;
-    }
-    .details-content.open { max-height: 500px; }
-    .chart-container {
-      position: relative;
-      width: 100%;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-      height: 400px;
-      max-height: 450px;
-    }
-    .animated-section {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-    }
-    .animated-section.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .language-bar-inner {
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 1s ease-out;
-    }
-    .is-visible .language-bar-inner { transform: scaleX(1); }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interaktiver Lebenslauf | Sayipriyan Sandyakumar</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  body.locked { overflow: hidden; height: 100vh; }
+  #protectedContent { display: none; }
+  body { font-family: 'Inter', sans-serif; background-color: #f8fafc; scroll-behavior: smooth; }
+  .timeline-item:before { content: ''; position: absolute; left: -33px; top: 5px; width: 24px; height: 24px; border-radius: 50%; background-color: #60a5fa; border: 4px solid #f8fafc; z-index: 10; }
+  .details-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; }
+  .details-content.open { max-height: 500px; }
+  .chart-container { position: relative; width: 100%; max-width: 500px; margin-left: auto; margin-right: auto; height: 400px; max-height: 450px; }
+  .animated-section { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+  .animated-section.is-visible { opacity: 1; transform: translateY(0); }
+  .language-bar-inner { transform: scaleX(0); transform-origin: left; transition: transform 1s ease-out; }
+  .is-visible .language-bar-inner { transform: scaleX(1); }
+  .timeline-icon { width: 24px; height: 24px; display:inline-block; background-color:#60a5fa; border-radius:50%; margin-right:8px; vertical-align:middle; }
+</style>
 </head>
 <body class="locked text-slate-700">
 
-  <!-- Passwort Overlay -->
-  <div id="passwordOverlay" class="fixed inset-0 bg-slate-900 flex items-center justify-center z-50">
-    <div class="bg-white p-8 rounded-xl shadow-lg w-96 text-center">
-      <h1 class="text-2xl font-bold mb-4 text-slate-800">🔒 Geschützter Bereich</h1>
-      <p class="text-slate-600 mb-6">Bitte Passwort eingeben, um die Seite zu sehen.</p>
-      <input id="passwordInput" type="password" placeholder="Passwort"
-             class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4">
-      <button onclick="checkPassword()"
-              class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">
-        Entsperren
-      </button>
-      <p id="errorMessage" class="text-red-500 text-sm mt-3 hidden">❌ Falsches Passwort</p>
-    </div>
+<!-- Passwort Overlay -->
+<div id="passwordOverlay" class="fixed inset-0 bg-slate-900 flex items-center justify-center z-50">
+  <div class="bg-white p-8 rounded-xl shadow-lg w-96 text-center">
+    <h1 class="text-2xl font-bold mb-4 text-slate-800">🔒 Geschützter Bereich</h1>
+    <p class="text-slate-600 mb-6">Bitte Passwort eingeben, um die Seite zu sehen.</p>
+    <input id="passwordInput" type="password" placeholder="Passwort"
+           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4">
+    <button onclick="checkPassword()"
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+      Entsperren
+    </button>
+    <p id="errorMessage" class="text-red-500 text-sm mt-3 hidden">❌ Falsches Passwort</p>
   </div>
+</div>
 
-  <!-- Geschützter Inhalt -->
-  <div id="protectedContent">
+<!-- Geschützter Inhalt -->
+<div id="protectedContent">
 
-    <header id="home" class="bg-white shadow-sm sticky top-0 z-50 transition-all duration-300">
-      <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
-        <div class="text-2xl font-bold text-slate-800">S. Sandyakumar</div>
-        <div class="hidden md:flex space-x-8">
-          <a href="#werdegang" class="text-slate-600 hover:text-blue-500 transition duration-300">Werdegang</a>
-          <a href="#kompetenzen" class="text-slate-600 hover:text-blue-500 transition duration-300">Kompetenzen</a>
-          <a href="#sprachen" class="text-slate-600 hover:text-blue-500 transition duration-300">Sprachen & Zertifikate</a>
-          <a href="#kontakt" class="text-slate-600 hover:text-blue-500 transition duration-300">Kontakt</a>
+  <!-- Header -->
+  <header id="home" class="bg-white shadow-sm sticky top-0 z-50 transition-all duration-300">
+    <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+      <div class="text-2xl font-bold text-slate-800">S. Sandyakumar</div>
+      <div class="hidden md:flex space-x-8">
+        <a href="#werdegang" class="text-slate-600 hover:text-blue-500 transition duration-300">Werdegang</a>
+        <a href="#kompetenzen" class="text-slate-600 hover:text-blue-500 transition duration-300">Kompetenzen</a>
+        <a href="#sprachen" class="text-slate-600 hover:text-blue-500 transition duration-300">Sprachen & Zertifikate</a>
+        <a href="#kontakt" class="text-slate-600 hover:text-blue-500 transition duration-300">Kontakt</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container mx-auto px-6 py-12 md:py-20">
+
+    <!-- Profil -->
+    <section class="flex flex-col md:flex-row items-center justify-center text-center md:text-left gap-12 mb-24 animated-section">
+      <img src="bild1.png" alt="Sayipriyan Sandyakumar Profilbild" class="w-48 h-48 rounded-full shadow-2xl border-4 border-white object-cover">
+      <div>
+        <h1 class="text-4xl md:text-6xl font-bold text-slate-900 mb-2">Sayipriyan Sandyakumar</h1>
+        <p class="text-xl md:text-2xl text-blue-600 font-medium">Systeminformatiker & IT-Allrounder</p>
+      </div>
+    </section>
+
+    <!-- Werdegang -->
+    <section id="werdegang" class="mb-20 animated-section">
+      <h2 class="text-3xl font-bold text-center mb-12 text-slate-800">Mein Werdegang</h2>
+      <div class="text-center max-w-3xl mx-auto mb-12 text-slate-600">
+        <p>Diese interaktive Zeitleiste zeigt meine Ausbildung und Berufserfahrung. Klicken Sie auf die einzelnen Stationen, um Details zu sehen.</p>
+      </div>
+      <div class="relative max-w-3xl mx-auto border-l-2 border-slate-200 pl-8">
+
+        <!-- Timeline Items -->
+        <div class="mb-8 relative timeline-item cursor-pointer animated-section" data-target="details-1">
+          <div class="flex items-center"><span class="timeline-icon"></span><h3 class="text-xl font-semibold text-slate-800">Plattforminformatiker EFZ</h3></div>
+          <p class="text-md text-slate-500">BBZBL-IT, Pratteln | 08/2021 - 08/2025</p>
+          <div id="details-1" class="details-content">
+            <p class="mt-4 text-slate-600">Aktuelle Ausbildung zum Plattformentwickler mit Fokus auf Systemadministration, Netzwerktechnik und IT-Infrastruktur-Management.</p>
+          </div>
         </div>
-      </nav>
-    </header>
 
-    <main class="container mx-auto px-6 py-12 md:py-20">
+        <div class="mb-8 relative timeline-item cursor-pointer animated-section" data-target="details-2">
+          <div class="flex items-center"><span class="timeline-icon"></span><h3 class="text-xl font-semibold text-slate-800">Systemengineer</h3></div>
+          <p class="text-md text-slate-500">Rohrbogen AG, Pratteln | seit 08/2025</p>
+          <div id="details-2" class="details-content">
+            <ul class="mt-4 text-slate-600 list-disc list-inside space-y-2">
+              <li>1st & 2nd Level Support</li>
+              <li>Verwaltung der IT-Infrastruktur</li>
+              <li>Unterstützung bei SAP- und Digitalisierungsprojekten</li>
+            </ul>
+          </div>
+        </div>
 
-      <!-- Profil -->
-      <section class="flex flex-col md:flex-row items-center justify-center text-center md:text-left gap-12 mb-24 animated-section">
-        <img src="bild1.png" alt="Sayipriyan Sandyakumar Profilbild" class="w-48 h-48 rounded-full shadow-2xl border-4 border-white object-cover">
+        <div class="mb-8 relative timeline-item cursor-pointer animated-section" data-target="details-3">
+          <div class="flex items-center"><span class="timeline-icon"></span><h3 class="text-xl font-semibold text-slate-800">IT- & kaufmännischer Allrounder</h3></div>
+          <p class="text-md text-slate-500">Rohrbogen AG, Pratteln | 09/2020 - 12/2020</p>
+          <div id="details-3" class="details-content">
+            <ul class="mt-4 text-slate-600 list-disc list-inside space-y-2">
+              <li>Alleinige IT-Betreuung vor Ort</li>
+              <li>Verwaltung der Unternehmenswebseite</li>
+              <li>Citrix & SIP (Isoware) Systeme</li>
+              <li>SAP-Prozessoptimierungen & Digitalisierungsprojekte</li>
+              <li>Rebranding-Unterstützung (Logos & Vorlagen)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mb-8 relative timeline-item cursor-pointer animated-section" data-target="details-4">
+          <div class="flex items-center"><span class="timeline-icon"></span><h3 class="text-xl font-semibold text-slate-800">Rekrutenschule</h3></div>
+          <p class="text-md text-slate-500">Schweizer Armee | 01/2021 - 05/2021</p>
+        </div>
+
+        <div class="mb-8 relative timeline-item cursor-pointer animated-section" data-target="details-5">
+          <div class="flex items-center"><span class="timeline-icon"></span><h3 class="text-xl font-semibold text-slate-800">Kaufmann EFZ</h3></div>
+          <p class="text-md text-slate-500">KvBL, Liestal | 08/2017 - 08/2020</p>
+        </div>
+
+        <div class="mb-8 relative timeline-item cursor-pointer animated-section" data-target="details-6">
+          <div class="flex items-center"><span class="timeline-icon"></span><h3 class="text-xl font-semibold text-slate-800">Kaufmännische Vorbereitungsschule</h3></div>
+          <p class="text-md text-slate-500">KVS, Reinach | 08/2016 - 07/2017</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Kompetenzen -->
+    <section id="kompetenzen" class="mb-20 animated-section">
+      <h2 class="text-3xl font-bold text-center mb-12 text-slate-800">Kernkompetenzen</h2>
+      <div class="text-center max-w-3xl mx-auto mb-12 text-slate-600">
+        <p>Meine Hauptkompetenzen in IT, Support, Administration und Digitalisierung.</p>
+      </div>
+      <div class="flex flex-col lg:flex-row items-center gap-12">
+
+        <div class="w-full lg:w-1/2">
+          <div class="chart-container">
+            <canvas id="kompetenzenChart"></canvas>
+          </div>
+        </div>
+
+        <div class="w-full lg:w-1/2 grid grid-cols-2 gap-x-8 gap-y-6">
+          <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
+            <h4 class="font-semibold text-slate-800">IT-Support</h4>
+            <p class="text-sm text-slate-600">1st & 2nd Level</p>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
+            <h4 class="font-semibold text-slate-800">Benutzerverwaltung</h4>
+            <p class="text-sm text-slate-600">Active Directory, GPOs</p>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
+            <h4 class="font-semibold text-slate-800">Windows OS</h4>
+            <p class="text-sm text-slate-600">Client & Server</p>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
+            <h4 class="font-semibold text-slate-800">M365 Administration</h4>
+            <p class="text-sm text-slate-600">Teams, Outlook, Admin Center</p>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
+            <h4 class="font-semibold text-slate-800">Virtualisierung</h4>
+            <p class="text-sm text-slate-600">Citrix User-Umgebung</p>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
+            <h4 class="font-semibold text-slate-800">ERP & SAP</h4>
+            <p class="text-sm text-slate-600">SIP/Isoware & Prozessoptimierung</p>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
+            <h4 class="font-semibold text-slate-800">Webseitenpflege</h4>
+            <p class="text-sm text-slate-600">Inhalte & Layouts</p>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
+            <h4 class="font-semibold text-slate-800">PowerShell</h4>
+            <p class="text-sm text-slate-600">Automatisierung & Grundlagen</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Sprachen & Zertifikate -->
+    <section id="sprachen" class="bg-white rounded-xl shadow-md p-8 md:p-12 animated-section">
+      <div class="text-center max-w-3xl mx-auto mb-12 text-slate-600">
+        <p>Meine Sprachkenntnisse und offiziellen Zertifikate.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+
         <div>
-          <h1 class="text-4xl md:text-6xl font-bold text-slate-900 mb-2">Sayipriyan Sandyakumar</h1>
-          <p class="text-xl md:text-2xl text-blue-600 font-medium">Systeminformatiker & IT-Allrounder</p>
-        </div>
-      </section>
-
-      <!-- Werdegang -->
-      <section id="werdegang" class="mb-20 animated-section">
-        <h2 class="text-3xl font-bold text-center mb-12 text-slate-800">Mein Werdegang</h2>
-        <div class="text-center max-w-3xl mx-auto mb-12 text-slate-600">
-          <p>Diese interaktive Zeitleiste fasst meine Ausbildung und Berufserfahrung zusammen. Sie zeigt meinen Weg vom Kaufmann zum Systeminformatiker. Klicken Sie auf die einzelnen Stationen, um mehr Details zu sehen.</p>
-        </div>
-        <div class="relative max-w-3xl mx-auto border-l-2 border-slate-200 pl-8">
-          <!-- Timeline Items (wie vorher) -->
-          <div class="mb-8 relative timeline-item cursor-pointer animated-section" data-target="details-1">
-            <h3 class="text-xl font-semibold text-slate-800">Plattforminformatiker EFZ</h3>
-            <p class="text-md text-slate-500">BBZBL-IT, Pratteln | Rohrbogen AG</p>
-            <time class="text-sm text-blue-500 font-medium">08/2021 - 08/2025</time>
-            <div id="details-1" class="details-content">
-              <p class="mt-4 text-slate-600">Aktuelle Ausbildung zum Plattformentwickler mit Fokus auf Systemadministration, Netzwerktechnik und IT-Infrastruktur-Management.</p>
+          <h3 class="text-2xl font-bold text-center mb-8 text-slate-800">Sprachen</h3>
+          <div class="space-y-6">
+            <div class="language-bar">
+              <div class="flex justify-between mb-1"><span class="text-base font-medium text-slate-700">Deutsch</span><span class="text-sm font-medium text-blue-700">C2</span></div>
+              <div class="w-full bg-slate-200 rounded-full h-2.5"><div class="bg-blue-600 h-2.5 rounded-full language-bar-inner" style="width:100%"></div></div>
+            </div>
+            <div class="language-bar">
+              <div class="flex justify-between mb-1"><span class="text-base font-medium text-slate-700">Tamilisch</span><span class="text-sm font-medium text-blue-700">C2</span></div>
+              <div class="w-full bg-slate-200 rounded-full h-2.5"><div class="bg-blue-600 h-2.5 rounded-full language-bar-inner" style="width:100%"></div></div>
+            </div>
+            <div class="language-bar">
+              <div class="flex justify-between mb-1"><span class="text-base font-medium text-slate-700">Englisch</span><span class="text-sm font-medium text-blue-700">B1</span></div>
+              <div class="w-full bg-slate-200 rounded-full h-2.5"><div class="bg-blue-600 h-2.5 rounded-full language-bar-inner" style="width:65%"></div></div>
+            </div>
+            <div class="language-bar">
+              <div class="flex justify-between mb-1"><span class="text-base font-medium text-slate-700">Französisch</span><span class="text-sm font-medium text-blue-700">A2</span></div>
+              <div class="w-full bg-slate-200 rounded-full h-2.5"><div class="bg-blue-600 h-2.5 rounded-full language-bar-inner" style="width:35%"></div></div>
             </div>
           </div>
-          <!-- Weitere Timeline Items wie in deinem Original-Code -->
-          <div class="mb-8 relative timeline-item cursor-pointer animated-section" data-target="details-2">
-            <h3 class="text-xl font-semibold text-slate-800">Systeminformatiker</h3>
-            <p class="text-md text-slate-500">Rohrbogen AG, Pratteln</p>
-            <time class="text-sm text-blue-500 font-medium">seit 08/2021</time>
-            <div id="details-2" class="details-content">
-              <p class="mt-4 text-slate-600">Übernahme von Verantwortung im 1st & 2nd Level Support, Verwaltung der IT-Infrastruktur und Unterstützung bei Projekten.</p>
+        </div>
+
+        <div>
+          <h3 class="text-2xl font-bold text-center mb-8 text-slate-800">Zertifikate</h3>
+          <div class="space-y-4">
+            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 hover:border-blue-300 transition-colors duration-300">
+              <p class="font-semibold text-slate-800">Cambridge Business English Certificate (BEC)</p>
+              <p class="text-sm text-slate-500">2019 | Niveau: Preliminary</p>
             </div>
           </div>
-          <!-- Die restlichen Items einfügen... -->
         </div>
-      </section>
 
-      <!-- Kompetenzen -->
-      <section id="kompetenzen" class="mb-20 animated-section">
-        <h2 class="text-3xl font-bold text-center mb-12 text-slate-800">Kernkompetenzen</h2>
-        <div class="text-center max-w-3xl mx-auto mb-12 text-slate-600">
-          <p>Visualisierung meiner Hauptkompetenzen in IT, Support und Systemadministration.</p>
-        </div>
-        <div class="flex flex-col lg:flex-row items-center gap-12">
-          <div class="w-full lg:w-1/2">
-            <div class="chart-container">
-              <canvas id="kompetenzenChart"></canvas>
-            </div>
-          </div>
-          <div class="w-full lg:w-1/2 grid grid-cols-2 gap-x-8 gap-y-6">
-            <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
-              <h4 class="font-semibold text-slate-800">IT-Support</h4>
-              <p class="text-sm text-slate-600">1st & 2nd Level</p>
-            </div>
-            <!-- Weitere Kompetenzen wie vorher -->
-          </div>
-        </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- Sprachen & Zertifikate -->
-      <section id="sprachen" class="bg-white rounded-xl shadow-md p-8 md:p-12 animated-section">
-        <div class="text-center max-w-3xl mx-auto mb-12 text-slate-600">
-          <p>Überblick über meine Sprachkenntnisse und Zertifikate.</p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div>
-            <h3 class="text-2xl font-bold text-center mb-8 text-slate-800">Sprachen</h3>
-            <!-- Sprachbalken wie vorher -->
-          </div>
-          <div>
-            <h3 class="text-2xl font-bold text-center mb-8 text-slate-800">Zertifizierungen</h3>
-            <!-- Zertifikate wie vorher -->
-          </div>
-        </div>
-      </section>
-
-    </main>
-
+    <!-- Kontakt & Referenzen -->
     <footer id="kontakt" class="bg-slate-800 text-slate-300 py-12">
       <div class="container mx-auto px-6 text-center">
         <h2 class="text-3xl font-bold text-white mb-8 animated-section">Kontakt & Referenzen</h2>
@@ -185,9 +238,8 @@
           </div>
           <div>
             <h4 class="font-semibold text-lg text-white">Referenzen</h4>
-            <p>Pascal Probst, Leiter Informatik, Rohrbogen AG</p>
-            <p>Moritz Jenni, Leiter Verkauf, Rohrbogen AG</p>
-            <p class="text-sm mt-2">(Kontaktdaten auf Anfrage)</p>
+            <p>Pascal Probst, Leiter Informatik, Rohrbogen AG, Tel.: 061 826 55 92</p>
+            <p>Moritz Jenni, Leiter Verkauf & Marketing, Rohrbogen AG, Tel.: 061 826 55 45</p>
           </div>
         </div>
         <p class="text-sm text-slate-400 mt-8">&copy; 2025 Sayipriyan Sandyakumar</p>
@@ -196,72 +248,66 @@
 
   </div>
 
-  <script>
-    function checkPassword() {
-      const input = document.getElementById("passwordInput").value;
-      const errorMessage = document.getElementById("errorMessage");
-      if (input === "kuttyma") { // <-- Passwort hier ändern
-        document.getElementById("passwordOverlay").style.display = "none";
-        document.getElementById("protectedContent").style.display = "block";
-        document.body.classList.remove("locked");
-      } else {
-        errorMessage.classList.remove("hidden");
-      }
-    }
+<script>
+function checkPassword() {
+  const input = document.getElementById("passwordInput").value;
+  const errorMessage = document.getElementById("errorMessage");
+  if(input==="kuttyma"){
+    document.getElementById("passwordOverlay").style.display="none";
+    document.getElementById("protectedContent").style.display="block";
+    document.body.classList.remove("locked");
+  } else { errorMessage.classList.remove("hidden"); }
+}
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const timelineItems = document.querySelectorAll('.timeline-item');
-      timelineItems.forEach(item => {
-        item.addEventListener('click', () => {
-          const targetId = item.getAttribute('data-target');
-          const detailsContent = document.getElementById(targetId);
-          if (detailsContent) { detailsContent.classList.toggle('open'); }
-        });
-      });
+document.addEventListener('DOMContentLoaded',()=>{
+  const timelineItems=document.querySelectorAll('.timeline-item');
+  timelineItems.forEach(item=>{item.addEventListener('click',()=>{
+    const targetId=item.getAttribute('data-target');
+    const detailsContent=document.getElementById(targetId);
+    if(detailsContent){detailsContent.classList.toggle('open');}
+  })});
 
-      const animatedElements = document.querySelectorAll('.animated-section, .language-bar, .timeline-item');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
-          if (entry.isIntersecting) {
-            setTimeout(() => { entry.target.classList.add('is-visible'); }, index * 100);
-          }
-        });
-      }, { threshold: 0.1 });
-      animatedElements.forEach(el => observer.observe(el));
+  const animatedElements=document.querySelectorAll('.animated-section, .language-bar, .timeline-item');
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach((entry,index)=>{
+      if(entry.isIntersecting){setTimeout(()=>{entry.target.classList.add('is-visible');},index*100);}
+    });
+  },{threshold:0.1});
+  animatedElements.forEach(el=>observer.observe(el));
 
-      const chartObserver = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) { createChart(); chartObserver.unobserve(entries[0].target); }
-      }, { threshold: 0.5 });
-      chartObserver.observe(document.getElementById('kompetenzenChart'));
+  const chartObserver=new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting){createChart();chartObserver.unobserve(entries[0].target);}
+  },{threshold:0.5});
+  chartObserver.observe(document.getElementById('kompetenzenChart'));
 
-      function createChart() {
-        const ctx = document.getElementById('kompetenzenChart').getContext('2d');
-        new Chart(ctx, {
-          type: 'radar',
-          data: {
-            labels: ['IT-Support','Systemadministration','Benutzerverwaltung','M365','Virtualisierung','ERP/SAP'],
-            datasets: [{
-              label: 'Kompetenzniveau',
-              data: [90,85,95,80,75,70],
-              backgroundColor: 'rgba(59, 130, 246, 0.2)',
-              borderColor: 'rgba(59, 130, 246, 1)',
-              borderWidth: 2,
-              pointBackgroundColor: 'rgba(59, 130, 246, 1)',
-              pointBorderColor: '#fff',
-              pointHoverBackgroundColor: '#fff',
-              pointHoverBorderColor: 'rgba(59, 130, 246, 1)'
-            }]
-          },
-          options: {
-            responsive:true,
-            maintainAspectRatio:false,
-            scales:{ r:{ angleLines:{color:'rgba(0,0,0,0.1)'}, grid:{color:'rgba(0,0,0,0.1)'} } },
-            plugins:{ legend:{display:false} }
-          }
-        });
+  function createChart(){
+    const ctx=document.getElementById('kompetenzenChart').getContext('2d');
+    new Chart(ctx,{
+      type:'radar',
+      data:{
+        labels:['IT-Support','Benutzerverwaltung','Windows OS','M365','Virtualisierung','ERP/SAP','Webseitenpflege','PowerShell','Systemadministration','Rebranding'],
+        datasets:[{
+          label:'Kompetenzniveau',
+          data:[90,85,90,80,75,70,65,60,85,50],
+          backgroundColor:'rgba(59,130,246,0.2)',
+          borderColor:'rgba(59,130,246,1)',
+          borderWidth:2,
+          pointBackgroundColor:'rgba(59,130,246,1)',
+          pointBorderColor:'#fff',
+          pointHoverBackgroundColor:'#fff',
+          pointHoverBorderColor:'rgba(59,130,246,1)'
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        scales:{r:{angleLines:{color:'rgba(0,0,0,0.1)'},grid:{color:'rgba(0,0,0,0.1)'}}},
+        plugins:{legend:{display:false}}
       }
     });
-  </script>
+  }
+});
+</script>
 
 </body>
 </html>
