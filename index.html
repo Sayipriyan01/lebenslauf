@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interaktiver Lebenslauf | Sayipriyan Sandyakumar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+    }
+    .timeline-item:before {
+      content: '';
+      position: absolute;
+      left: -33px;
+      top: 5px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: #60a5fa;
+      border: 4px solid #f8fafc;
+      z-index: 10;
+    }
+    .details-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease-in-out;
+    }
+    .details-content.open {
+      max-height: 500px;
+    }
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      margin: auto;
+      height: 400px;
+      max-height: 450px;
+    }
+    .animated-section {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .animated-section.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .language-bar-inner {
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 1s ease-out;
+    }
+    .is-visible .language-bar-inner {
+      transform: scaleX(1);
+    }
+    /* Header Shrink on Scroll */
+    header.scrolled {
+      background-color: #1e293b;
+      color: white;
+      transition: all 0.3s ease;
+    }
+    header.scrolled a { color: #cbd5e1; }
+    header.scrolled a:hover { color: #60a5fa; }
+
+    /* Timeline Hover Effekt */
+    .timeline-item:hover {
+      transform: scale(1.02);
+      transition: transform 0.3s ease;
+    }
+
+    /* Pulsierender Button */
+    .btn-pulse {
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    /* Modal Animation */
+    @keyframes fadeIn {
+      from {opacity:0; transform: translateY(-20px);}
+      to {opacity:1; transform: translateY(0);}
+    }
+    .animate-fadeIn { animation: fadeIn 0.4s ease-out; }
+  </style>
+</head>
+<body class="text-slate-700">
+
+  <!-- Zugangscode -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const code = prompt("🔑 Bitte Zugangscode eingeben:");
+      if (code !== "meinpasswort123") {
+        document.body.innerHTML = "<h1 style='text-align:center; margin-top:50px;'>❌ Zugriff verweigert</h1>";
+      }
+    });
+  </script>
+
+  <header id="home" class="bg-white shadow-sm sticky top-0 z-50 transition-all duration-300">
+    <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+      <div class="text-2xl font-bold text-slate-800">S. Sandyakumar</div>
+      <div class="hidden md:flex space-x-8">
+        <a href="#werdegang" class="hover:text-blue-500 transition">Werdegang</a>
+        <a href="#kompetenzen" class="hover:text-blue-500 transition">Kompetenzen</a>
+        <a href="#sprachen" class="hover:text-blue-500 transition">Sprachen & Zertifikate</a>
+        <a href="#kontakt" class="hover:text-blue-500 transition">Kontakt</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container mx-auto px-6 py-12 md:py-20">
+
+    <!-- Dein bestehender Inhalt bleibt gleich (Profil, Werdegang, Kompetenzen, Sprachen) -->
+
+    <section id="sprachen" class="bg-white rounded-xl shadow-md p-8 md:p-12 animated-section">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div>
+          <h3 class="text-2xl font-bold text-center mb-8 text-slate-800">Sprachen</h3>
+          <!-- Sprachen-Balken bleiben gleich -->
+        </div>
+        <div>
+          <h3 class="text-2xl font-bold text-center mb-8 text-slate-800">Zertifizierungen</h3>
+          <div class="text-center">
+            <button onclick="openModal()" class="mt-6 px-6 py-3 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700 transition">
+              📜 Zertifikate ansehen
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="kontakt" class="bg-slate-800 text-slate-300 py-12 text-center">
+    <h2 class="text-3xl font-bold text-white mb-6">Kontakt & Referenzen</h2>
+    <p>📧 <a href="mailto:sayipriyan2000@gmail.com" class="text-blue-400 hover:text-blue-300">sayipriyan2000@gmail.com</a></p>
+    <p>📞 <a href="tel:+41787993848" class="text-blue-400 hover:text-blue-300">+41 78 799 38 48</a></p>
+    <a href="mailto:sayipriyan2000@gmail.com"
+       class="btn-pulse inline-block mt-6 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow-lg hover:bg-blue-700 transition">
+       📩 Jetzt Kontakt aufnehmen
+    </a>
+    <p class="text-sm text-slate-400 mt-8">&copy; 2025 Sayipriyan Sandyakumar</p>
+  </footer>
+
+  <!-- Zertifikate Modal -->
+  <div id="zertifikateModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
+    <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-8 relative animate-fadeIn">
+      <button onclick="closeModal()" class="absolute top-3 right-3 text-slate-500 hover:text-red-500 text-2xl">&times;</button>
+      <h3 class="text-2xl font-bold text-slate-800 mb-6">Meine Zertifikate</h3>
+      <div class="space-y-4">
+        <div class="p-4 border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition">
+          <p class="font-semibold text-slate-800">Cambridge Business English Certificate (BEC)</p>
+          <p class="text-sm text-slate-500">Niveau: B1 | 2019</p>
+        </div>
+        <div class="p-4 border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition">
+          <p class="font-semibold text-slate-800">DELF (Diplôme d'Études en Langue Française)</p>
+          <p class="text-sm text-slate-500">Niveau: A2 | 2017</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Modal Funktionen
+    function openModal() {
+      document.getElementById("zertifikateModal").classList.remove("hidden");
+      document.getElementById("zertifikateModal").classList.add("flex");
+    }
+    function closeModal() {
+      document.getElementById("zertifikateModal").classList.add("hidden");
+    }
+
+    // Header Scroll Effekt
+    window.addEventListener("scroll", () => {
+      const header = document.querySelector("header");
+      if (window.scrollY > 50) {
+        header.classList.add("scrolled");
+      } else {
+        header.classList.remove("scrolled");
+      }
+    });
+  </script>
+</body>
+</html>
